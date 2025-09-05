@@ -35,7 +35,7 @@ chest-xray-assignment/
 │  ├─ RESULTS.md              # Metrics & confusion matrix
 │  └─ TECHNICAL.md            # Approach & architecture
 ├─ models/
-│  ├─ classification_model.pth  # ← put downloaded model here
+│  ├─ classification_model.pth  # ← put downloaded model here (name must be same)
 │  ├─ metrics.json
 │  ├─ model_card.md
 │  ├─ README.md
