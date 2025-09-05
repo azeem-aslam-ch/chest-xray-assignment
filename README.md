@@ -26,8 +26,8 @@ chest-xray-assignment/
 ├─ demo/                      # Screenshots / demo assets
 ├─ deployment/
 │  ├─ DEPLOYMENT.md           # Deployment notes
-│  ├─ Dockerfile              # Docker build for production
-│  ├─ Procfile                # Process entry (e.g., Render/Heroku-style)
+│  ├─ Dockerfile              # Docker build for production not use in this assigment 
+│  ├─ Procfile                # Process entry (e.g., Render/Heroku-style) not use in this assigment 
 │  └─ runtime                 # Runtime pin (e.g., python-3.x)
 ├─ docs/
 │  ├─ APP_README.md           # End-user instructions
@@ -41,7 +41,7 @@ chest-xray-assignment/
 │  ├─ README.md
 │  └─ validation_results.xlsx
 ├─ src/
-│  └─ classification_task.py  # Training/inference utilities
+│  └─ classification_task.py  # Training/inference utilities This is collab file 
 ├─ .gitattributes
 ├─ .gitignore
 ├─ LICENSE
@@ -84,22 +84,10 @@ streamlit run app.py
 ```
 Open the local URL shown in the terminal (usually `http://localhost:8501`).
 
----
-
-## 🐳 Docker (production-style)
-From the project root:
-```bash
-cd deployment
-docker build -t chest-xray-app .
-docker run -p 8501:8501 -e PORT=8501 -v "%cd%\..\models":/app/models chest-xray-app
-```
-The `-v` bind mounts your local `models/` so the container can load `classification_model.pth`.
-
-> If your Dockerfile already copies the model during build, you can omit `-v`. Keeping the model **outside** the image is preferred for size and updates.
 
 ---
 
-## ☁️ Streamlit Cloud (alternative)
+## ☁️ Streamlit Cloud 
 1. Fork/Connect the GitHub repo.  
 2. Set **Main file path** to `app/app.py`.  
 3. Ensure `app/requirements.txt` is detected.  
