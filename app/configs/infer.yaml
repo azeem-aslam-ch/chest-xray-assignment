@@ -1,0 +1,7 @@
+# Inference config
+image_size: [224, 224]
+thresholds:
+  COVID: 0.5
+  Normal: 0.5
+  Lung Opacity: 0.5
+  Viral Pneumonia: 0.5

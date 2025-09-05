@@ -1,0 +1,11 @@
+{
+  "overall": {
+    "accuracy": 99
+  },
+  "per_class": {
+    "Normal": {98.3},
+    "COVID": {99.4},
+    "Lung Opacity": {97.5},
+    "Viral Pneumonia": {95.6}
+  }
+}

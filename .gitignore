@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.pth
+*.pt
+*.ckpt
+*.log
+runs/
+.env
+.venv/
+.streamlit/secrets.toml

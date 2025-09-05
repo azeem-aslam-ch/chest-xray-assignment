@@ -1,0 +1,5 @@
+image,expected_label,notes
+sample_1.png,Normal,Clear lungs
+sample_2.png,COVID,Ground-glass opacities
+sample_3.png,Lung Opacity,Patchy opacity
+sample_4.png,Viral Pneumonia,Diffuse patterns

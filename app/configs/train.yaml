@@ -1,0 +1,21 @@
+# Experiment config (training)
+seed: 42
+epochs: 10
+batch_size: 16
+lr: 3e-4
+optimizer: adamw
+scheduler: cosine
+image_size: [224, 224]
+
+data:
+  root: /path/to/COVID-19_Radiography_Dataset
+  train_split: 0.8
+  classes: ['Normal','COVID','Lung_Opacity','Viral Pneumonia']
+
+aug:
+  hflip: 0.5
+  rotation: 10
+
+output:
+  ckpt_path: classification_model.pth
+  log_dir: runs/exp1
