@@ -146,5 +146,5 @@ See `LICENSE`.
 ## 👤 Contact
 **Azeem Aslam** — open an issue on GitHub or use the contacts in *Live links.txt*.
 ---
-Mobile: +923324308550
-Portfolio: www.azeemaslam.com
+- Mobile: +923324308550
+- Portfolio: www.azeemaslam.com
