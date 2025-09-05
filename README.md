@@ -1,138 +1,159 @@
-# Chest X‑Ray Diagnostic Assistant 🩺
+# Chest X-Ray Diagnostic Assistant 🩺
 
-A deep learning application for analyzing chest X‑ray images, built with **PyTorch** and **Streamlit**. It provides **multi‑disease classification** and **visual localization** of potential abnormalities via **Grad‑CAM**.
-
-> **Disclaimer:** This tool is for **education and research** only and **not** a medical device. Always consult qualified clinicians for diagnosis or treatment.
-
----
-
-## 🚀 Live Application Demo
-Experience the live application here:
-
-➡️ **[Open the Live App](YOUR_STREAMLIT_URL_HERE)**  
-*(Replace `YOUR_STREAMLIT_URL_HERE` with your Streamlit link.)*
+A PyTorch + Streamlit app for **multi‑disease chest X‑ray classification** with **Grad‑CAM** visual explanations.  
+**Disclaimer:** Research/education only — not a medical device.
 
 ---
 
-## 📥 Required: Download the Trained Model
-The trained model (`classification_model.pth`) is too large for GitHub. Download it and place it inside the `deployment/` folder **before** running the app.
+## 🔗 Live Links
+- **Live App:** https://chest-xray-app-mfawfpdbjakjdr7bsotynh.streamlit.app/
+- **GitHub Repository:** https://github.com/azeem-aslam-ch/chest-xray-assignment
+- **Download Trained Model (.pth):** https://drive.google.com/file/d/1JLddmWmofxj8fIjVzbu1iZlF8XQt8B2Z/view?usp=drive_link
 
-➡️ **[Download the Trained Model from Google Drive](YOUR_GOOGLE_DRIVE_LINK_HERE)**  
-*(Replace `YOUR_GOOGLE_DRIVE_LINK_HERE` with your actual Google Drive link.)*
+> After downloading the model, place it at: `models/classification_model.pth` (recommended). Keep only **one** copy.
 
-**After downloading:** put `classification_model.pth` in `deployment/`
+---
 
+## 📁 Repository Structure
 ```
-deployment/
-├─ app.py
-├─ requirements.txt
-├─ utils/...
-└─ classification_model.pth   ← place the file here
+chest-xray-assignment/
+├─ app/
+│  ├─ .streamlit/             # Streamlit theme/config
+│  ├─ configs/                # App configs (optional)
+│  ├─ src/                    # UI helpers/components
+│  ├─ app.py                  # Streamlit UI entry (local/dev)
+│  └─ requirements.txt        # App dependencies
+├─ demo/                      # Screenshots / demo assets
+├─ deployment/
+│  ├─ DEPLOYMENT.md           # Deployment notes
+│  ├─ Dockerfile              # Docker build for production
+│  ├─ Procfile                # Process entry (e.g., Render/Heroku-style)
+│  └─ runtime                 # Runtime pin (e.g., python-3.x)
+├─ docs/
+│  ├─ APP_README.md           # End-user instructions
+│  ├─ DISEASES.md             # Supported labels & notes
+│  ├─ RESULTS.md              # Metrics & confusion matrix
+│  └─ TECHNICAL.md            # Approach & architecture
+├─ models/
+│  ├─ classification_model.pth  # ← put downloaded model here
+│  ├─ metrics.json
+│  ├─ model_card.md
+│  ├─ README.md
+│  └─ validation_results.xlsx
+├─ src/
+│  └─ classification_task.py  # Training/inference utilities
+├─ .gitattributes
+├─ .gitignore
+├─ LICENSE
+├─ Live links.txt
+└─ README.md                  # You are here
 ```
 
 ---
 
 ## ✨ Features
-- **Advanced Classification:** Predicts the most likely condition among: `Normal`, `COVID`, `Lung_Opacity`, `Viral Pneumonia`.
-- **Visual Localization:** Generates **Grad‑CAM** heatmaps to highlight regions contributing to predictions.
-- **Interactive UI:** Clean, responsive Streamlit interface for quick testing.
-- **DICOM Support:** Can read and process medical image formats (e.g., DICOM).
+- **Classification:** `Normal`, `COVID`, `Lung_Opacity`, `Viral Pneumonia`
+- **Explainability:** Grad‑CAM heatmaps
+- **DICOM support:** via `pydicom`
+- **Simple UI:** upload → predict → visualize
 
 ---
 
-## 🧰 Tech Stack
-- **Frameworks:** PyTorch, Streamlit
-- **Imaging:** OpenCV / PIL, pydicom (for DICOM)
-- **Explainability:** Grad‑CAM
-
----
-
-## 🖥️ How to Run Locally
-
-### 1) Clone the Repository
+## 🚀 Run Locally
 ```bash
-git clone https://github.com/azeem-aslam-ch/chest-xray-app.git
-cd chest-xray-app
-```
+# 1) Clone
+git clone https://github.com/azeem-aslam-ch/chest-xray-assignment.git
+cd chest-xray-assignment
 
-### 2) Download the Model
-- Download `classification_model.pth` from the Google Drive link above.  
-- Place it into the `deployment/` folder.
+# 2) (Recommended) Create & activate a virtual env
+python -m venv .venv
+# Windows:
+.venv\Scripts\activate
+# macOS/Linux:
+# source .venv/bin/activate
 
-### 3) Install Dependencies
-```bash
-cd deployment
+# 3) Install dependencies
+cd app
 pip install -r requirements.txt
-```
 
-> Tip: Use a virtual environment (`python -m venv .venv && source .venv/bin/activate` on macOS/Linux or `.venv\Scripts\activate` on Windows).
+# 4) Download model and place at:
+# models/classification_model.pth
 
-### 4) Launch the App
-```bash
+# 5) Launch Streamlit
 streamlit run app.py
 ```
-
-Then open the local URL shown in your terminal (usually `http://localhost:8501`).
+Open the local URL shown in the terminal (usually `http://localhost:8501`).
 
 ---
 
-## 📂 Repository Structure
+## 🐳 Docker (production-style)
+From the project root:
+```bash
+cd deployment
+docker build -t chest-xray-app .
+docker run -p 8501:8501 -e PORT=8501 -v "%cd%\..\models":/app/models chest-xray-app
 ```
-chest-xray-app/
-├─ deployment/
-│  ├─ app.py
-│  ├─ requirements.txt
-│  ├─ utils/
-│  └─ classification_model.pth  # (you add this)
-├─ docs/
-│  ├─ README_assets/ (images, diagrams)
-│  └─ model_card.md
-├─ notebooks/ (experiments and EDA)
-└─ LICENSE
+The `-v` bind mounts your local `models/` so the container can load `classification_model.pth`.
+
+> If your Dockerfile already copies the model during build, you can omit `-v`. Keeping the model **outside** the image is preferred for size and updates.
+
+---
+
+## ☁️ Streamlit Cloud (alternative)
+1. Fork/Connect the GitHub repo.  
+2. Set **Main file path** to `app/app.py`.  
+3. Ensure `app/requirements.txt` is detected.  
+4. The model should be supplied at runtime (e.g., mounted, or downloaded in app code). If not possible, keep it locally for development.
+
+---
+
+## 📄 Documentation
+- Quick usage: `docs/APP_README.md`  
+- Diseases: `docs/DISEASES.md`  
+- Results: `docs/RESULTS.md`, plus `models/metrics.json`, `models/validation_results.xlsx`  
+- Technical design: `docs/TECHNICAL.md`  
+- Model card: `models/model_card.md`
+
+---
+
+## 🧷 .gitignore (recommended)
+```
+# Python / temp
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+*.log
+
+# OS
+.DS_Store
+
+# Models / artifacts
+*.pth
+models/
 ```
 
----
-
-## 🧪 Usage
-1. Open the app (local or Live App).  
-2. Upload a chest X‑ray image (`.png`, `.jpg`, `.jpeg`, or DICOM).  
-3. View the **predicted class**, **confidence**, and **Grad‑CAM heatmap**.  
-4. Download results if enabled.
-
----
-
-## 📝 Supported Labels
-- `Normal`
-- `COVID`
-- `Lung_Opacity`
-- `Viral Pneumonia`
-
-*(Adjust this list if you retrain the model.)*
+> Prefer hosting the model on Google Drive (link above). If you must keep it in the repo, use **Git LFS**:
+> ```bash
+> git lfs install
+> git lfs track "*.pth"
+> git add .gitattributes
+> git commit -m "Track model files with LFS"
+> git push
+> ```
 
 ---
 
 ## ❗ Troubleshooting
-- **Model not found:** Ensure `deployment/classification_model.pth` exists.  
-- **Torch/CUDA issues:** Install CPU‑only PyTorch if you don’t have a GPU.  
-- **Pillow / OpenCV errors:** Reinstall dependencies: `pip install --upgrade --force-reinstall -r requirements.txt`.  
-- **DICOM import errors:** Check `pydicom` is installed and the file is valid.
+- **Model not found:** ensure `models/classification_model.pth` exists at runtime.  
+- **CUDA issues:** use CPU build of PyTorch if no GPU is available.  
+- **DICOM read errors:** verify `pydicom` is installed and file is valid.  
+- **Port blocked:** change `-p 8501:8501` to another port, e.g., `-p 8502:8501`.
 
 ---
 
-## 🔒 Data & Privacy
-All uploaded images are processed locally in your session. Do not upload personal or sensitive patient data unless you have permission and comply with applicable regulations.
+## 📜 License
+See `LICENSE`.
 
----
-
-## 📄 License
-This project is released under the **MIT License** unless otherwise specified.
-
----
-
-## 🙋 Contact
-For issues or feature requests, open a GitHub issue or contact **Azeem Aslam**.
-
----
-
-**Replace the placeholders (`YOUR_STREAMLIT_URL_HERE`, `YOUR_GOOGLE_DRIVE_LINK_HERE`) before publishing.**
-
+## 👤 Contact
+**Azeem Aslam** — open an issue on GitHub or use the contacts in *Live links.txt*.
